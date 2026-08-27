@@ -1,0 +1,19 @@
+export enum TargetPlatform {
+  WINDOWS = 'WINDOWS',
+  MAC = 'MAC',
+  LINUX = 'LINUX',
+  ANDROID = 'ANDROID',
+  IOS = 'IOS',
+  PLAYSTATION = 'PLAYSTATION',
+  XBOX = 'XBOX',
+  NINTENDO_SWITCH = 'NINTENDO_SWITCH',
+  WEBGL = 'WEBGL',
+}
+
+export enum BuildStatus {
+  QUEUED = 'QUEUED',
+  BUILDING = 'BUILDING',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}

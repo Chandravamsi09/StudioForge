@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Tenant } from './entities/tenant.entity';
 import { User } from './entities/user.entity';
+import { Build } from './entities/build.entity';
 
 @Module({
   imports: [
@@ -16,12 +17,12 @@ import { User } from './entities/user.entity';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.database'),
-        entities: [Tenant, User],
+        entities: [Tenant, User, Build],
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
       }),
     }),
-    TypeOrmModule.forFeature([Tenant, User]),
+    TypeOrmModule.forFeature([Tenant, User, Build]),
   ],
   exports: [TypeOrmModule],
 })
