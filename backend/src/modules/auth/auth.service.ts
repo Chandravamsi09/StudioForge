@@ -123,6 +123,7 @@ export class AuthService {
 
   async getProfile(userId: string, tenantId: string) {
     const user = await this.usersService.findById(userId, tenantId);
+    const tenant = user.tenant || (await this.tenantsService.findById(user.tenantId));
     return {
       id: user.id,
       email: user.email,
@@ -131,11 +132,11 @@ export class AuthService {
       role: user.role,
       isActive: user.isActive,
       tenant: {
-        id: user.tenant.id,
-        name: user.tenant.name,
-        slug: user.tenant.slug,
-        planTier: user.tenant.planTier,
-        maxSeats: user.tenant.maxSeats,
+        id: tenant.id,
+        name: tenant.name,
+        slug: tenant.slug,
+        planTier: tenant.planTier,
+        maxSeats: tenant.maxSeats,
       },
       createdAt: user.createdAt,
     };
