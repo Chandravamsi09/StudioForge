@@ -1,5 +1,5 @@
-import { UserRole } from '../../database/enums/role.enum';
-import { PlanTier } from '../../database/enums/plan-tier.enum';
+import { UserRole } from '../../../database/enums/role.enum';
+import { PlanTier } from '../../../database/enums/plan-tier.enum';
 
 export interface JwtPayload {
   sub: string; // User ID

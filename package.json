@@ -1,0 +1,23 @@
+{
+  "name": "studioforge",
+  "version": "1.0.0",
+  "description": "Enterprise Game Studio Operations Platform",
+  "private": true,
+  "scripts": {
+    "start": "npm run start:backend",
+    "start:backend": "cd backend && npm run start:dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "test": "cd backend && npm test",
+    "test:e2e": "cd backend && npm run test:e2e"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
