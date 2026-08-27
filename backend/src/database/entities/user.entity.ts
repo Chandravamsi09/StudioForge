@@ -38,7 +38,7 @@ export class User {
   lastName: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: UserRole,
     default: UserRole.DEVELOPER,
   })
@@ -47,9 +47,9 @@ export class User {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

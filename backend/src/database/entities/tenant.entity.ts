@@ -23,7 +23,7 @@ export class Tenant {
   slug: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: PlanTier,
     default: PlanTier.FREE,
   })
@@ -38,9 +38,9 @@ export class Tenant {
   @OneToMany(() => User, (user) => user.tenant, { cascade: true })
   users: User[];
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

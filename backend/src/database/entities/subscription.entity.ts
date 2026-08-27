@@ -26,14 +26,14 @@ export class Subscription {
   tenant: Tenant;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: PlanTier,
     default: PlanTier.FREE,
   })
   planTier: PlanTier;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: SubscriptionStatus,
     default: SubscriptionStatus.ACTIVE,
   })
@@ -45,14 +45,14 @@ export class Subscription {
   @Column({ type: 'int', default: 0 })
   monthlyPriceUsd: number;
 
-  @Column({ type: 'timestamp with time zone', nullable: true })
-  currentPeriodStart: Date;
-
-  @Column({ type: 'timestamp with time zone', nullable: true })
-  currentPeriodEnd: Date;
-
   @Column({ type: 'boolean', default: false })
   cancelAtPeriodEnd: boolean;
+
+  @Column({ name: 'current_period_start', nullable: true })
+  currentPeriodStart: Date;
+
+  @Column({ name: 'current_period_end', nullable: true })
+  currentPeriodEnd: Date;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   paymentProviderCustomerId?: string;
@@ -60,9 +60,9 @@ export class Subscription {
   @Column({ type: 'varchar', length: 100, nullable: true })
   paymentProviderSubscriptionId?: string;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

@@ -38,30 +38,30 @@ export class LiveOpsEvent {
   description?: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: LiveOpsEventType,
     default: LiveOpsEventType.CUSTOM,
   })
   type: LiveOpsEventType;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: LiveOpsStatus,
     default: LiveOpsStatus.DRAFT,
   })
   status: LiveOpsStatus;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ name: 'start_time' })
   startTime: Date;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ name: 'end_time' })
   endTime: Date;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ name: 'config_payload', type: 'simple-json', nullable: true })
   configPayload: Record<string, any>;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  targetAudience?: string; // e.g., "ALL_PLAYERS", "VIP", "LEVEL_GREATER_THAN_10"
+  @Column({ name: 'target_audience', type: 'varchar', length: 100, nullable: true })
+  targetAudience?: string;
 
   @Column({ type: 'uuid', nullable: true })
   createdByUserId?: string;
@@ -70,9 +70,9 @@ export class LiveOpsEvent {
   @JoinColumn({ name: 'createdByUserId' })
   createdByUser?: User;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

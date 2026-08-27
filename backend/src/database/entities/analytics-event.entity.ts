@@ -41,7 +41,7 @@ export class AnalyticsEvent {
   eventType: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: EventCategory,
     default: EventCategory.GAMEPLAY,
   })
@@ -53,12 +53,12 @@ export class AnalyticsEvent {
   @Column({ type: 'varchar', length: 50, nullable: true })
   gameVersion?: string;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: 'simple-json', nullable: true })
   properties: Record<string, any>;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ name: 'client_timestamp' })
   clientTimestamp: Date;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'ingested_at' })
   ingestedAt: Date;
 }

@@ -43,21 +43,21 @@ export class Ticket {
   reproductionSteps?: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: TicketSeverity,
     default: TicketSeverity.MEDIUM,
   })
   severity: TicketSeverity;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: TicketStatus,
     default: TicketStatus.OPEN,
   })
   status: TicketStatus;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: TicketPriority,
     default: TicketPriority.NORMAL,
   })
@@ -93,9 +93,9 @@ export class Ticket {
   @Column({ type: 'simple-array', nullable: true })
   tags?: string[];
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

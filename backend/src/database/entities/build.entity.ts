@@ -35,14 +35,14 @@ export class Build {
   version: string;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: TargetPlatform,
     default: TargetPlatform.WINDOWS,
   })
   targetPlatform: TargetPlatform;
 
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: BuildStatus,
     default: BuildStatus.QUEUED,
   })
@@ -66,7 +66,7 @@ export class Build {
   @Column({ type: 'text', nullable: true })
   changelog?: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   metadata?: Record<string, any>;
 
   @Column({ type: 'uuid', nullable: true })
@@ -76,9 +76,9 @@ export class Build {
   @JoinColumn({ name: 'createdByUserId' })
   createdByUser?: User;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

@@ -14,17 +14,29 @@ import { Subscription } from './entities/subscription.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('database.host'),
-        port: configService.get<number>('database.port'),
-        username: configService.get<string>('database.username'),
-        password: configService.get<string>('database.password'),
-        database: configService.get<string>('database.database'),
-        entities: [Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent, Subscription],
-        synchronize: configService.get<boolean>('database.synchronize'),
-        logging: configService.get<boolean>('database.logging'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbType = configService.get<string>('database.type', process.env.DB_TYPE || 'sqlite');
+        if (dbType === 'postgres') {
+          return {
+            type: 'postgres' as const,
+            host: configService.get<string>('database.host'),
+            port: configService.get<number>('database.port'),
+            username: configService.get<string>('database.username'),
+            password: configService.get<string>('database.password'),
+            database: configService.get<string>('database.database'),
+            entities: [Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent, Subscription],
+            synchronize: configService.get<boolean>('database.synchronize', true),
+            logging: false,
+          };
+        }
+        return {
+          type: 'sqlite' as const,
+          database: 'studioforge.sqlite',
+          entities: [Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent, Subscription],
+          synchronize: true,
+          logging: false,
+        };
+      },
     }),
     TypeOrmModule.forFeature([Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent, Subscription]),
   ],
