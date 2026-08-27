@@ -1,0 +1,97 @@
+name: StudioForge CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-test:
+    name: Backend Lint, Unit & E2E Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: studioforge
+          POSTGRES_PASSWORD: studioforge_secret_dev
+          POSTGRES_DB: studioforge_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: backend/package.json
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Run Backend Unit Tests
+        working-directory: backend
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci_test_jwt_secret_studioforge_2026
+          JWT_REFRESH_SECRET: ci_test_jwt_refresh_secret_2026
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USERNAME: studioforge
+          DB_PASSWORD: studioforge_secret_dev
+          DB_DATABASE: studioforge_db
+          DB_SYNCHRONIZE: true
+        run: npm test
+
+      - name: Run Backend E2E Integration Tests
+        working-directory: backend
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci_test_jwt_secret_studioforge_2026
+          JWT_REFRESH_SECRET: ci_test_jwt_refresh_secret_2026
+        run: npm run test:e2e
+
+  frontend-build:
+    name: Frontend Typecheck & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Compile Production Build
+        working-directory: frontend
+        run: npm run build
