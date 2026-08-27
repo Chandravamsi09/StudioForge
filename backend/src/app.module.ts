@@ -9,6 +9,7 @@ import { BuildsModule } from './modules/builds/builds.module';
 import { QAModule } from './modules/qa/qa.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { LiveOpsModule } from './modules/live-ops/live-ops.module';
+import { BillingModule } from './modules/billing/billing.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 
@@ -26,6 +27,7 @@ import { NestModule, MiddlewareConsumer } from '@nestjs/common';
     QAModule,
     AnalyticsModule,
     LiveOpsModule,
+    BillingModule,
   ],
 })
 export class AppModule implements NestModule {

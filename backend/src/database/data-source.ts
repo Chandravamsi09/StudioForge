@@ -6,6 +6,7 @@ import { Build } from './entities/build.entity';
 import { Ticket } from './entities/ticket.entity';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { LiveOpsEvent } from './entities/live-ops-event.entity';
+import { Subscription } from './entities/subscription.entity';
 
 config();
 
@@ -18,6 +19,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'studioforge_db',
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
-  entities: [Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent],
+  entities: [Tenant, User, Build, Ticket, AnalyticsEvent, LiveOpsEvent, Subscription],
   migrations: ['src/database/migrations/*.ts'],
 });
