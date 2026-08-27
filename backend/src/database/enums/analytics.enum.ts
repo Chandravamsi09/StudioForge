@@ -1,0 +1,7 @@
+export enum EventCategory {
+  GAMEPLAY = 'GAMEPLAY',
+  ECONOMY = 'ECONOMY',
+  PERFORMANCE = 'PERFORMANCE',
+  PROGRESSION = 'PROGRESSION',
+  SYSTEM = 'SYSTEM',
+}

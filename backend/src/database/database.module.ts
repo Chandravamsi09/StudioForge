@@ -5,6 +5,7 @@ import { Tenant } from './entities/tenant.entity';
 import { User } from './entities/user.entity';
 import { Build } from './entities/build.entity';
 import { Ticket } from './entities/ticket.entity';
+import { AnalyticsEvent } from './entities/analytics-event.entity';
 
 @Module({
   imports: [
@@ -18,12 +19,12 @@ import { Ticket } from './entities/ticket.entity';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.database'),
-        entities: [Tenant, User, Build, Ticket],
+        entities: [Tenant, User, Build, Ticket, AnalyticsEvent],
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
       }),
     }),
-    TypeOrmModule.forFeature([Tenant, User, Build, Ticket]),
+    TypeOrmModule.forFeature([Tenant, User, Build, Ticket, AnalyticsEvent]),
   ],
   exports: [TypeOrmModule],
 })
