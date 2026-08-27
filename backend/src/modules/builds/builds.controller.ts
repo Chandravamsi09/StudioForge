@@ -18,15 +18,19 @@ import { UpdateBuildDto } from './dto/update-build.dto';
 import { QueryBuildsDto } from './dto/query-builds.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRole } from '../../database/enums/role.enum';
 
 @ApiTags('Build Pipelines')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('builds')
 export class BuildsController {
   constructor(private readonly buildsService: BuildsService) {}
 
   @Post()
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new game build artifact / pipeline run' })
   @ApiResponse({ status: 201, description: 'Build successfully created' })
@@ -58,6 +62,7 @@ export class BuildsController {
   }
 
   @Patch(':id')
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER)
   @ApiOperation({ summary: 'Update build status, duration, or artifact metadata' })
   @ApiParam({ name: 'id', description: 'Build UUID' })
   @ApiResponse({ status: 200, description: 'Build updated' })
@@ -71,6 +76,7 @@ export class BuildsController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @ApiOperation({ summary: 'Delete a build record' })
   @ApiParam({ name: 'id', description: 'Build UUID' })
   @ApiResponse({ status: 200, description: 'Build deleted' })

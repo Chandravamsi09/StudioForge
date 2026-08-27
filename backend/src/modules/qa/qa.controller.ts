@@ -19,15 +19,19 @@ import { QueryTicketsDto } from './dto/query-tickets.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { TicketStatus } from '../../database/enums/ticket.enum';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRole } from '../../database/enums/role.enum';
 
 @ApiTags('QA & Bug Tracking')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('qa/tickets')
 export class QAController {
   constructor(private readonly qaService: QAService) {}
 
   @Post()
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER, UserRole.QA_ENGINEER)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Submit a new bug ticket / QA report' })
   @ApiResponse({ status: 201, description: 'Ticket created successfully' })
@@ -59,6 +63,7 @@ export class QAController {
   }
 
   @Patch(':id')
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER, UserRole.QA_ENGINEER)
   @ApiOperation({ summary: 'Update ticket description, reproduction steps, or severity' })
   @ApiParam({ name: 'id', description: 'Ticket UUID' })
   @ApiResponse({ status: 200, description: 'Ticket updated' })
@@ -72,6 +77,7 @@ export class QAController {
   }
 
   @Patch(':id/assign')
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER, UserRole.QA_ENGINEER)
   @ApiOperation({ summary: 'Assign ticket to a developer' })
   @ApiParam({ name: 'id', description: 'Ticket UUID' })
   @ApiBody({ schema: { properties: { assignedToUserId: { type: 'string', format: 'uuid' } } } })
@@ -85,6 +91,7 @@ export class QAController {
   }
 
   @Patch(':id/status')
+  @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.DEVELOPER, UserRole.QA_ENGINEER)
   @ApiOperation({ summary: 'Transition ticket status in bug lifecycle' })
   @ApiParam({ name: 'id', description: 'Ticket UUID' })
   @ApiBody({ schema: { properties: { status: { type: 'string', enum: Object.values(TicketStatus) } } } })
@@ -98,6 +105,7 @@ export class QAController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @ApiOperation({ summary: 'Delete a bug ticket' })
   @ApiParam({ name: 'id', description: 'Ticket UUID' })
   @ApiResponse({ status: 200, description: 'Ticket deleted' })

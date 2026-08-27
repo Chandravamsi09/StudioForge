@@ -13,10 +13,13 @@ import { UpgradePlanDto } from './dto/upgrade-plan.dto';
 import { InviteMemberDto } from './dto/invite-member.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { UserRole } from '../../database/enums/role.enum';
 
 @ApiTags('Billing & Subscriptions')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('billing')
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
@@ -29,6 +32,7 @@ export class BillingController {
   }
 
   @Post('upgrade')
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Upgrade subscription tier (e.g. to PRO or ENTERPRISE)' })
   @ApiResponse({ status: 200, description: 'Subscription plan updated' })
@@ -37,6 +41,7 @@ export class BillingController {
   }
 
   @Post('cancel')
+  @Roles(UserRole.OWNER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Schedule subscription cancellation at period end' })
   @ApiResponse({ status: 200, description: 'Subscription cancelled at period end' })
@@ -45,6 +50,7 @@ export class BillingController {
   }
 
   @Post('invite')
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Invite a new team member with automated seat limit enforcement' })
   @ApiResponse({ status: 201, description: 'Team member added successfully' })
