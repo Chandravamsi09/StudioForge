@@ -3,6 +3,8 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const logger = new Logger('StudioForgeBootstrap');
@@ -15,6 +17,10 @@ async function bootstrap() {
 
   // Prefix all routes with /api/v1
   app.setGlobalPrefix(apiPrefix);
+
+  // Global Exception Filter & Structured Logging
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Global validation pipe for strict DTO validation
   app.useGlobalPipes(
